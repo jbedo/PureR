@@ -1,16 +1,14 @@
 cabal-version:   2.4
-name:            purenix
+name:            purer
 version:         1.0
 license:         BSD-3-Clause
 build-type:      Simple
 license-file:    LICENSE
 -- category:
 -- description:     description
-synopsis:        Nix backend for PureScript.  Transpile PureScript code to Nix.
-author:          Dennis Gosnell, Jonas Carpay
-maintainer:      Dennis Gosnell <cdep.illabout@gmail.com>
-copyright:       2021 Dennis Gosnell, Jonas Carpay
-homepage:        https://github.com/purenix-org/purenix
+synopsis:        R backend for PureScript.  Transpile PureScript code to R.
+maintainer:      Justin Bedo <cu@cua0.org>
+homepage:        https://github.com/jbedo/purer
 tested-with:     GHC ==8.10.4
 extra-doc-files:
   CHANGELOG.md
@@ -18,7 +16,7 @@ extra-doc-files:
 
 source-repository head
   type:     git
-  location: git://github.com/purenix-org/purenix
+  location: git://github.com/jbedo/purer
 
 common common-options
   build-depends:    base >=4.9 && <5
@@ -32,12 +30,12 @@ library
   import:          common-options
   hs-source-dirs:  src
   exposed-modules:
-    PureNix.Convert
-    PureNix.Expr
-    PureNix.Identifiers
-    PureNix.Main
-    PureNix.Prelude
-    PureNix.Print
+    PureR.Convert
+    PureR.Expr
+    PureR.Identifiers
+    PureR.Main
+    PureR.Prelude
+    PureR.Print
 
   build-depends:
     , aeson
@@ -52,9 +50,9 @@ library
     , purescript-cst
     , text
 
-executable purenix
+executable purer
   import:         common-options
   hs-source-dirs: app
   main-is:        Main.hs
-  build-depends:  purenix
+  build-depends:  purer
   ghc-options:    -threaded -rtsopts -with-rtsopts=-N

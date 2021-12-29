@@ -2,7 +2,7 @@ final: prev: {
   haskell = prev.haskell // {
     packageOverrides = hfinal: hprev:
       prev.haskell.packageOverrides hfinal hprev // {
-        purenix =
+        purer =
           let
             filesToIgnore = [
               "default.nix"
@@ -19,9 +19,9 @@ final: prev: {
 
             src = builtins.path {
               # Naming this path makes sure that people will get the same
-              # hash even if they checkout the purenix repo into a
+              # hash even if they checkout the purer repo into a
               # directory called something else.
-              name = "purenix-src";
+              name = "purer-src";
               path = ../.;
               filter = path: type:
                 with final.lib;
@@ -30,16 +30,16 @@ final: prev: {
             };
 
           in
-          hfinal.callCabal2nix "purenix" src { };
+          hfinal.callCabal2nix "purer" src { };
       };
   };
 
-  purenix =
-    final.haskell.lib.compose.justStaticExecutables final.haskellPackages.purenix;
+  purer =
+    final.haskell.lib.compose.justStaticExecutables final.haskellPackages.purer;
 
-  hacking-on-purenix-shell = final.haskellPackages.shellFor {
+  hacking-on-purer-shell = final.haskellPackages.shellFor {
     withHoogle = false;
-    packages = hpkgs: [ hpkgs.purenix ];
+    packages = hpkgs: [ hpkgs.purer ];
     nativeBuildInputs = [
       final.cabal-install
       final.ghcid
@@ -51,10 +51,10 @@ final: prev: {
     ];
   };
 
-  use-purenix-shell = final.stdenv.mkDerivation {
-    name = "use-purenix-shell";
+  use-purer-shell = final.stdenv.mkDerivation {
+    name = "use-purer-shell";
     nativeBuildInputs = [
-      final.purenix
+      final.purer
       final.purescript
       final.spago
     ];

@@ -1,5 +1,5 @@
 {
-  description = "PureNix";
+  description = "PureR";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   inputs.flake-utils.url = "github:numtide/flake-utils";
@@ -12,21 +12,21 @@
           pkgs = import inputs.nixpkgs { inherit system; overlays = [ overlay ]; };
         in
         {
-          defaultPackage = pkgs.purenix;
-          packages.purenix = pkgs.purenix;
+          defaultPackage = pkgs.purer;
+          packages.purer = pkgs.purer;
 
-          devShell = pkgs.hacking-on-purenix-shell;
+          devShell = pkgs.hacking-on-purer-shell;
           devShells = {
-            # This shell is for hacking on purenix itself.  You get GHC with a
+            # This shell is for hacking on purer itself.  You get GHC with a
             # suitable package database, as well as a bunch of common Haskell
             # development tools.  You also get purs and spago that can be used for
-            # testing out purenix.
-            hacking-on-purenix = pkgs.hacking-on-purenix-shell;
-            # This is a shell that contains purenix, purs, and spago.  It will
+            # testing out purer.
+            hacking-on-purer = pkgs.hacking-on-purer-shell;
+            # This is a shell that contains purer, purs, and spago.  It will
             # mainly be used by the flake.nix for all our PureScript packages.
             # It can also be used by users who just want to play around with
-            # purenix, but not hack on it.
-            use-purenix = pkgs.use-purenix-shell;
+            # purer, but not hack on it.
+            use-purer = pkgs.use-purer-shell;
           };
         };
     in
