@@ -42,7 +42,7 @@ identToText (PS.Ident t) = t
 -- This was relaxed in 0.14.2:
 -- https://github.com/purescript/purescript/pull/4096
 identToText (PS.GenIdent mvar n) =
-  fromMaybe "__instance" mvar <> T.pack (show n)
+  fromMaybe "instance__" mvar <> T.pack (show n)
 identToText PS.UnusedIdent = error "impossible"
 
 -- | Make an R variable binder from a CoreFn binder.
@@ -90,7 +90,7 @@ newtype Key = UnsafeKey {unKey :: Text}
   deriving newtype (IsString, Eq, Show)
 
 moduleKey :: PS.ModuleName -> Key
-moduleKey (PS.ModuleName mdl) = UnsafeKey $ "\"" <> mdl <> "\""
+moduleKey (PS.ModuleName mdl) = UnsafeKey mdl
 
 identKey :: PS.Ident -> Key
 identKey = UnsafeKey . unVar . mkVar

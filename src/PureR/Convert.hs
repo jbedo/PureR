@@ -19,8 +19,8 @@ import qualified Language.PureScript           as P
 import           Language.PureScript.CoreFn
 import           Language.PureScript.Errors     ( SourceSpan )
 import           Language.PureScript.PSString   ( PSString(toUTF16CodeUnits) )
-import qualified PureR.Expr                  as N
-import qualified PureR.Identifiers           as N
+import qualified PureR.Expr                    as N
+import qualified PureR.Identifiers             as N
 import           PureR.Prelude
 
 -- | The monad conversion runs in.
@@ -83,7 +83,7 @@ module' thisModule imports exports reexports foreign' decls = do
                 )
               | (_, mdl) <- imports
               , mdl /= thisModule
-              , mdl /= P.ModuleName "Prim"
+              , not . T.isPrefixOf "Prim" $ P.runModuleName mdl
               ]
         in  ("module", N.assoc attrs)
       ffiBinds = foreignBinding <$> foreign'

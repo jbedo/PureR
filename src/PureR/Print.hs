@@ -17,7 +17,7 @@ import           Data.Semigroup                 ( mtimesDefault )
 import           Data.Text.Lazy.Builder         ( Builder )
 import qualified Data.Text.Lazy.Builder        as TB
 import           Lens.Micro.Platform
-import           PureR.Expr            hiding ( string )
+import           PureR.Expr              hiding ( string )
 import           PureR.Identifiers
 import           PureR.Prelude
 
@@ -83,12 +83,16 @@ binder :: Var -> Printer
 binder = text . unVar
 
 key :: Key -> Printer
-key = text . unKey
+key k = text ("`" <> unKey k <> "`")
 
 ppExpr :: ExprF Printer -> Printer
-ppExpr (Var v          ) = binder v
-ppExpr (Lam arg body) = "function(" <> text (unVar arg) <> "){" <> body <> "}"
-ppExpr (App f   x      ) = f <> lparen <> x <> rparen
+ppExpr (Var v) = binder v
+ppExpr (Lam arg body) =
+  "function(" <> text (tickUnused (unVar arg)) <> "){" <> body <> "}"
+ where
+  tickUnused "__unused" = "unused__"
+  tickUnused x          = x
+ppExpr (App f x        ) = f <> lparen <> x <> rparen
 ppExpr (Assoc bs) = "list(" <> (sepBy comma $ binding key <$> bs) <> rparen
 ppExpr (List  []       ) = "list()"
 ppExpr (List  l        ) = "list(" <> sepBy comma l <> rparen
@@ -97,7 +101,7 @@ ppExpr (Cond c      t e) = "if(" <> c <> "){" <> t <> "} else {" <> e <> "}"
 ppExpr (Bin  Equals l r) = lparen <> l <> " == " <> r <> rparen
 ppExpr (Bin  And    l r) = lparen <> l <> " && " <> r <> rparen
 ppExpr (Not body       ) = lparen <> "!" <> lparen <> body <> rparen <> rparen
-ppExpr (Sel x k        ) = x <> "$`" <> key k <> "`"
+ppExpr (Sel x k        ) = x <> "$" <> key k
 ppExpr (Double n       ) = string (show n)
 ppExpr (String s       ) = delimit '"' '"' $ text s
 ppExpr (Index _ _      ) = error "index"
