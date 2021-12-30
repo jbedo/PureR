@@ -20,13 +20,13 @@ jobs:
       #   with:
       #     name: jmc
       #     authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-      - name: Build purenix
+      - name: Build PureR
         run: nix build -L
       # TODO `nix flake check` is currently system-dependent but should be used here
-      # - name: Build purenix checks
-      #   run: nix build -L '.#checks.x86_64-linux."purenix:test:purenix-test"'
-      - name: Build PureNix devShells
-        run: nix build -L '.#devShells.x86_64-linux.hacking-on-purenix' '.#devShells.x86_64-linux.use-purenix'
+      # - name: Build PureR checks
+      #   run: nix build -L '.#checks.x86_64-linux."purer:test:purer-test"'
+      - name: Build PureR devShells
+        run: nix build -L '.#devShells.x86_64-linux.hacking-on-purer' '.#devShells.x86_64-linux.use-purer'
 
   cabal-build:
     name: Cabal GHC ${{ matrix.ghc }} on ${{ matrix.os }} (${{ matrix.required }})
@@ -66,7 +66,7 @@ jobs:
         run: |
           cabal new-build --only-dependencies
 
-      - name: Build purenix
+      - name: Build purer
         run: |
           cabal new-build
 
