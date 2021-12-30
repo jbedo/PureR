@@ -20,7 +20,7 @@ purescript module is placed in an independent file (`default.R`) which returns a
 list of exported content. The above example can be loaded in R with
 
 ``` R
-Main <- source("./output/Main/default.R", chdir=T)$source
+Main <- source("./output/Main/default.R", chdir=T)$value
 ```
 
 The `chdir=T` is important here as other modules are loaded relative to the
