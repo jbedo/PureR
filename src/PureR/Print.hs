@@ -20,6 +20,7 @@ import           Lens.Micro.Platform
 import           PureR.Expr              hiding ( string )
 import           PureR.Identifiers
 import           PureR.Prelude
+import qualified Data.Text as T
 
 newtype PrintState = PrintState {psBuilder :: Builder}
 
@@ -103,7 +104,7 @@ ppExpr (Bin  And    l r) = lparen <> l <> " && " <> r <> rparen
 ppExpr (Not body       ) = lparen <> "!" <> lparen <> body <> rparen <> rparen
 ppExpr (Sel x k        ) = x <> "$" <> key k
 ppExpr (Double n       ) = string (show n)
-ppExpr (String s       ) = delimit '"' '"' $ text s
+ppExpr (String s       ) = delimit '"' '"' $ text $ T.replace "\\" "\\\\" s
 ppExpr (Index _ _      ) = error "index"
 ppExpr (Source path    ) = "source(" <> text path <> ", chdir=T)$value"
 ppExpr (Update x y     ) = "Map(function(a, b) b," <> x <> comma <> y <> rparen
