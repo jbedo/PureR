@@ -30,7 +30,7 @@ newtype Expr = Expr {unExpr :: ExprF Expr}
 -- Note that 'String', unlike 'Key' and 'Var', is a raw representation of the intended string, completely unquoted and unescaped.
 -- That means that it might consist of, for example, a single '"'.
 -- It is the job of the printer to figure out how to correctly escape those.
--- 
+--
 -- R doesn't have let bindings but they're useful so we model them here
 -- and let the printers implement them
 data ExprF f
@@ -50,6 +50,7 @@ data ExprF f
   | Index f Integer
   | Source Text
   | Update f f
+  | Memo Text f
   deriving stock (Functor, Foldable, Traversable, Show)
 
 data Op = Equals | And
@@ -101,6 +102,9 @@ index = (Expr .) . Index
 
 source :: Text -> Expr
 source = Expr . Source
+
+memo :: Text -> Expr -> Expr
+memo = (Expr .) . Memo
 
 update :: Expr -> Expr -> Expr
 update = (Expr .) . Update

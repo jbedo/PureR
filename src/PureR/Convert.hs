@@ -79,7 +79,7 @@ module' thisModule imports exports reexports foreign' decls = do
   let importBinding =
         let attrs =
               [ ( N.moduleKey mdl
-                , N.lam (head $ N.numberedVars "unused__") (N.source ("'../" <> P.runModuleName mdl <> "/default.R'"))
+                , N.memo ("module.source." <> P.runModuleName mdl) (N.source ("'../" <> P.runModuleName mdl <> "/default.R'"))
                 )
               | (_, mdl) <- imports
               , mdl /= thisModule
@@ -101,7 +101,7 @@ module' thisModule imports exports reexports foreign' decls = do
   inheritFrom m exps =
     (\e ->
         ( N.identKey e
-        , N.sel (N.app (N.sel (N.var "module") (N.moduleKey m)) (N.int 0)) (N.identKey e)
+        , N.sel (N.sel (N.var "module") (N.moduleKey m)) (N.identKey e)
         )
       )
       <$> exps
@@ -129,7 +129,7 @@ expr (Var ann (P.Qualified mqual name)) = localAnn ann $ do
   (_, thisModule, _) <- ask
   pure $ case mqual of
     Just qual | qual /= thisModule ->
-      N.sel (N.app (N.sel (N.var "module") (N.moduleKey qual)) (N.int 0)) (N.identKey name)
+      N.sel (N.sel (N.var "module") (N.moduleKey qual)) (N.identKey name)
     _ -> N.var (N.mkVar name)
 expr (Accessor ann sel body) =
   localAnn ann $ flip N.sel (N.stringKey sel) <$> expr body

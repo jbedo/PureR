@@ -108,6 +108,15 @@ ppExpr (Index _ _      ) = error "index"
 ppExpr (Source path    ) = "source(" <> text path <> ", chdir=T)$value"
 ppExpr (Update x y     ) = "Map(function(a, b) b," <> x <> comma <> y <> rparen
 
+ppExpr (Memo key e) =
+  "(function() {res <- get0(\""
+    <> text key
+    <> "\"); if(length(res) == 0){res <- "
+    <> e
+    <> "; assign(\""
+    <> text key
+    <> "\", res, .GlobalEnv)};res})()"
+
 ppExpr (Let binds body) =
   "(function(){"
     <> sepBy newline (dobind <$> binds)
